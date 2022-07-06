@@ -5,9 +5,11 @@
 {% endblock page_header %}
 
 {% block content %}
-  <p>
+  {% if user == topic.owner %}
+    <p>
       <a href="{% url 'learning_logs:new_entry' topic %}">Add new entry</a>
     </p>
+  {% endif %}
     
     {% for entry in entries %}
       <div class="card mb-3">
