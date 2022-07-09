@@ -6,9 +6,9 @@
 {% endblock page_header %}
 
 {% block content %}
+  {% include 'learning_logs/messages.html' %}
   <form method="post"  action="{% url 'learning_logs:new_topic' %}" class="form">
     {% csrf_token %}
-    {% include 'learning_logs/messages.html' %}
     {% bootstrap_form form %}
     {% buttons %}
       <button type="submit" name="submit" class="btn btn-primary">Add topic</button>

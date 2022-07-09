@@ -5,11 +5,17 @@
 {% endblock page_header %}
 
 {% block content %}
-  <ul>
-    {% for topic in topics %}
-      <li><h3>
-        <a href="{% url 'learning_logs:topic' topic %}">{{ topic }}</a>
-      <h3></li>
+  {% if user.is_authenticated %}<h3>My topics:</h3>{% endif %}
+    <ul>
+  {% for topic in topics %}
+      {% if user == topic.owner %}
+        <li><h3>
+          <a href="{% url 'learning_logs:topic' topic %}">{{ topic }}</a>
+          {% if topic.visibility == 'public' %}
+            <small>(public)</small>
+          {% endif %}
+        <h3></li>
+      {% endif %}
     {% empty %}
       <li><h3>No topics have been added yet.<h3></li>
     {% endfor %}
@@ -19,4 +25,18 @@
     <a class="btn btn-outline-primary" href="{% url 'learning_logs:new_topic' %}"
           role="button"><h5>Add a new topic</h5></a>
   {% endif %}
+  
+  <p><h3>Public topics:</h3></p>
+  <ul>
+    {% for topic in topics %}
+      {% if topic.visibility == 'public' and user != topic.owner %}
+        <li><h3>
+          <a href="{% url 'learning_logs:topic' topic %}">{{ topic }}</a>
+        <h3></li>
+      {% endif %}
+    {% empty %}
+      <li><h3>There are no public topics.<h3></li>
+    {% endfor %}
+  </ul>
+  
 {% endblock content %}

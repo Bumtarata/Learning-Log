@@ -59,11 +59,30 @@ def new_topic(request):
     # Display a blank or invalid form.
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
+    
+@login_required
+def edit_topic(request, topic_name):
+    """Edit an existing topic."""
+    topic = get_object_or_404(Topic, owner=request.user, text=topic_name)
+    
+    if request.method != 'POST':
+        # Initial request; pre-fill form with the current topic.
+        form = TopicForm(instance=topic)
+    else:
+        # Post data submitted; process data.
+        form = TopicForm(instance=topic, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('learning_logs:topic', topic_name=topic.text)
+            
+    context = {'topic': topic, 'form': form}
+    return render(request, 'learning_logs/edit_topic.html', context)
  
 @login_required 
 def new_entry(request, topic_name):
     """Add a new entry for a particular topic."""
     topic = get_object_or_404(Topic, owner=request.user, text=topic_name)
+    check_topic_owner(topic, request.user)
     
     if request.method != 'POST':
         # No data submitted; create a blank form.

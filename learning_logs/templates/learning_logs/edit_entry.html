@@ -2,7 +2,7 @@
 {% load bootstrap4 %}
 
 {% block page_header %}
-  <p><a href="{% url 'learning_logs:new_entry' topic %}">{{ topic }}</a></p>
+  <p><a href="{% url 'learning_logs:topic' topic %}">{{ topic }}</a></p>
   <h2>Edit entry:</h2>
 {% endblock page_header %}
 
